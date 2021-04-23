@@ -1,6 +1,5 @@
 package prj5;
 
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -10,18 +9,18 @@ public class LinkedList<E> {
      * This represents a node in a singly linked list. This node stores data
      * along with having a pointer to the next node in the list
      *
-     * @param <D>
+     * @param <E>
      * @author tejus (tejusj)
      * @version 4/25/2021
      * 
      */
-    public static class Node<D> {
+    public static class Node<E> {
 
         // The data element stored in the node.
-        private D data;
+        private E data;
 
         // The next node in the sequence.
-        private Node<D> next;
+        private Node<E> next;
 
         /**
          * Creates a new node with the given data
@@ -29,7 +28,7 @@ public class LinkedList<E> {
          * @param d
          *            the data to put inside the node
          */
-        public Node(D d) {
+        public Node(E d) {
             data = d;
         }
 
@@ -40,7 +39,7 @@ public class LinkedList<E> {
          * @param n
          *            the node after this one
          */
-        public void setNext(Node<D> n) {
+        public void setNext(Node<E> n) {
             next = n;
         }
 
@@ -50,7 +49,7 @@ public class LinkedList<E> {
          *
          * @return the next node
          */
-        public Node<D> next() {
+        public Node<E> next() {
             return next;
         }
 
@@ -60,9 +59,10 @@ public class LinkedList<E> {
          *
          * @return the data in the node
          */
-        public D getData() {
+        public E getData() {
             return data;
         }
+
     }
 
     private Node<E> head;
@@ -74,7 +74,7 @@ public class LinkedList<E> {
      * Creates a new LinkedList object
      */
     public LinkedList() {
-        head = null;
+        setHead(null);
         size = 0;
 
     }
@@ -88,6 +88,15 @@ public class LinkedList<E> {
 
     public int size() {
         return size;
+    }
+
+
+    /**
+     * 
+     * @return head node
+     */
+    public Node<E> getHead() {
+        return head;
     }
 
 
@@ -115,19 +124,19 @@ public class LinkedList<E> {
             throw new IndexOutOfBoundsException("Index is out of bounds");
         }
 
-        Node<E> current = head;
+        Node<E> current = getHead();
 
         // empty stack case
         if (isEmpty()) {
-            head = new Node<E>(obj);
+            setHead(new Node<E>(obj));
         }
 
         // all other cases
         else {
             if (index == 0) {
                 Node<E> newNode = new Node<E>(obj);
-                newNode.setNext(head);
-                head = newNode;
+                newNode.setNext(getHead());
+                setHead(newNode);
             }
             else {
                 int currentIndex = 0;
@@ -164,11 +173,11 @@ public class LinkedList<E> {
             throw new IllegalArgumentException("Object is null");
         }
 
-        Node<E> current = head;
+        Node<E> current = getHead();
 
         // empty stack case
         if (isEmpty()) {
-            head = new Node<E>(obj);
+            setHead(new Node<E>(obj));
         }
 
         // other cases
@@ -202,11 +211,11 @@ public class LinkedList<E> {
      */
 
     public boolean remove(E obj) {
-        Node<E> current = head;
+        Node<E> current = getHead();
 
         // account for matching head
-        if ((null != head) && (obj.equals(current.data))) {
-            head = head.next;
+        if ((null != getHead()) && (obj.equals(current.data))) {
+            setHead(getHead().next);
             size--;
             return true;
         }
@@ -243,19 +252,19 @@ public class LinkedList<E> {
 
     public boolean remove(int index) {
         // if the index is invalid
-        if (index < 0 || head == null) {
+        if (index < 0 || getHead() == null) {
             throw new IndexOutOfBoundsException("Index is out of bounds");
         }
         else {
-            Node<E> current = head;
+            Node<E> current = getHead();
             int currentIndex = 0;
             if (size == 1) {
-                head = null;
+                setHead(null);
                 size--;
                 return true;
             }
             if (index == 0) {
-                head = head.next;
+                setHead(getHead().next);
                 size--;
                 return true;
             }
@@ -288,7 +297,7 @@ public class LinkedList<E> {
      */
 
     public E get(int index) {
-        Node<E> current = head;
+        Node<E> current = getHead();
         int currentIndex = 0;
         E data = null;
 
@@ -318,7 +327,7 @@ public class LinkedList<E> {
      */
 
     public boolean contains(E obj) {
-        Node<E> current = head;
+        Node<E> current = getHead();
         while (current != null) {
             if (obj.equals(current.data)) {
                 return true;
@@ -336,9 +345,9 @@ public class LinkedList<E> {
 
     public void clear() {
         // make sure we don't call clear on an empty list
-        if (head != null) {
-            head.setNext(null);
-            head = null;
+        if (getHead() != null) {
+            getHead().setNext(null);
+            setHead(null);
             size = 0;
         }
     }
@@ -354,7 +363,7 @@ public class LinkedList<E> {
 
     public int lastIndexOf(E obj) {
         int lastIndex = -1;
-        Node<E> current = head;
+        Node<E> current = getHead();
         int currentIndex = 0;
         while (current != null) {
             if (obj.equals(current.data)) {
@@ -378,7 +387,7 @@ public class LinkedList<E> {
     public String toString() {
         String result = "{";
 
-        Node<E> current = head;
+        Node<E> current = getHead();
         while (current != null) {
             result += "" + current.data;
             current = current.next;
@@ -402,7 +411,7 @@ public class LinkedList<E> {
 
         Object[] array = new Object[this.size()];
 
-        Node<E> current = head;
+        Node<E> current = getHead();
         int count = 0;
         while (current != null) {
             array[count] = current.getData();
@@ -433,8 +442,8 @@ public class LinkedList<E> {
             @SuppressWarnings("unchecked")
             LinkedList<E> other = ((LinkedList<E>)obj);
             if (other.size() == this.size()) {
-                Node<E> current = head;
-                Node<E> otherCurrent = other.head;
+                Node<E> current = getHead();
+                Node<E> otherCurrent = other.getHead();
                 while (current != null) {
                     if (!current.getData().equals(otherCurrent.getData())) {
                         return false;
@@ -459,6 +468,11 @@ public class LinkedList<E> {
         return new LinkedListIterator<E>();
     }
 
+
+    public void setHead(Node<E> sorted) {
+        this.head = sorted;
+    }
+
     private class LinkedListIterator<A> implements Iterator<E> {
 
         private Node<E> current;
@@ -467,7 +481,7 @@ public class LinkedList<E> {
          * Creates a new DLListIterator
          */
         public LinkedListIterator() {
-            current = head;
+            current = getHead();
         }
 
 
