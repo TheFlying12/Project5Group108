@@ -39,6 +39,14 @@ public class Race {
 
 
     /**
+     * Setter method for the name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    /**
      * Getter method for the infected people
      * 
      * @return the number of infected people
@@ -49,12 +57,28 @@ public class Race {
 
 
     /**
+     * Setter method for the infected people
+     */
+    public void setInfected(int inf) {
+        infected = inf;
+    }
+
+
+    /**
      * Getter method for the dead people
      * 
      * @return the number of dead people
      */
     public int getDeaths() {
         return deaths;
+    }
+
+
+    /**
+     * Setter method for the dead people
+     */
+    public void setDeaths(int de) {
+        deaths = de;
     }
 
 
