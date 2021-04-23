@@ -10,13 +10,13 @@ package covid;
  */
 public class State {
     private String name;
-    private LinkedList races;
+    private LinkedList<Race> races;
     
 
     /**
      * This class gets the data releated to the state
      */
-    public State(String name, LinkedList races) {
+    public State(String name, LinkedList<Race> races) {
         this.name = name;
         this.races = races;
     }
@@ -31,7 +31,7 @@ public class State {
      * this method returns the races. 
      * @return
      */
-    public LinkedList getRaces() {
+    public LinkedList<Race> getRaces() {
         return races; 
     }
 
