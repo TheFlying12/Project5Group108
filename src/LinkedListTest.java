@@ -3,274 +3,379 @@
  *
  */
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import student.TestCase;
 
-/**
- * This class tests all the methods in the DLList class
- * 
- * @author Patrick Stock (pstock)
- * @version 4/25/21
- */
 public class LinkedListTest extends TestCase {
-    /**
-     * the list we will use
-     */
+
+    private LinkedList<String> emptyListA;
+    private LinkedList<String> emptyListB;
+    private LinkedList<String> smallListA;
+    private LinkedList<String> smallListB;
+    private LinkedList<String> bigListA;
+    private LinkedList<String> bigListB;
     private LinkedList<String> list;
+    private String nullObject;
 
     /**
-     * run before every test case
+     * Initializes 2 empty lists, 2 lists with a small number of items, and 2
+     * lists with a large number of items
      */
-    @Override
     public void setUp() {
-        list = new LinkedList<String>();
+        emptyListA = new LinkedList<String>();
+        emptyListB = new LinkedList<String>();
+
+        smallListA = new LinkedList<String>();
+        smallListB = new LinkedList<String>();
+
+        smallListA.add("soccer");
+        smallListA.add("swimming");
+        smallListA.add("gymnastics");
+
+        smallListB.add("soccer");
+        smallListB.add("swimming");
+        smallListB.add("gymnastics");
+
+        bigListA = new LinkedList<String>();
+
+        for (int i = 0; i < 100; i++) {
+            bigListA.add("sport" + i);
+        }
+
+        bigListB = new LinkedList<String>();
+        for (int i = 0; i < 100; i++) {
+            bigListB.add("sport" + i);
+        }
+
+        // to be explicit
+        nullObject = null;
     }
 
 
     /**
-     * Tests that an IndexOutOfBounds exception is thrown when the index is
-     * greater than or equal to size and less than zero
+     * Tests the equals method on an empty list
      */
-    public void testRemoveException() {
-        list.add("A");
-        Exception e = null;
-        try {
-            list.remove(2);
-        }
-        catch (Exception exception) {
-            e = exception;
-        }
-        assertTrue(e instanceof IndexOutOfBoundsException);
-        e = null;
-        try {
-            list.remove(-1);
-        }
-        catch (Exception exception) {
-            e = exception;
-        }
-        assertTrue(e instanceof IndexOutOfBoundsException);
+    public void testEqualsEmptyList() {
+        assertEquals(emptyListA, emptyListA);
+        assertEquals(emptyListA, emptyListB);
+        assertFalse(emptyListA.equals(nullObject));
+        assertFalse(emptyListA.equals("soccer"));
+        assertFalse(emptyListA.equals(smallListA));
+        assertFalse(smallListA.equals(emptyListA));
+        emptyListB.add("jump roping");
+        assertFalse(emptyListA.equals(emptyListB));
+        smallListA.clear();
+        assertEquals(emptyListA, smallListA);
     }
 
 
     /**
-     * Tests that objects can be removed at the beginning and end and that the
-     * size is changed
+     * Tests the equals method on a list with a small number of items in it
      */
-    public void testRemoveIndex() {
-        list.add("A");
-        list.add("B");
-        assertTrue(list.remove(1));
-        assertEquals(1, list.size());
-        list.add("B");
-        assertTrue(list.remove(0));
-        assertEquals(1, list.size());
+    public void testEqualsSmallList() {
+        assertEquals(smallListA, smallListA);
+        assertEquals(smallListA, smallListB);
+        assertFalse(smallListA.equals(nullObject));
+        assertFalse(smallListA.equals("soccer"));
+        assertFalse(smallListA.equals(bigListA));
+        assertFalse(smallListA.equals(emptyListA));
+        smallListB.add("jump roping");
+        assertFalse(smallListA.equals(smallListB));
+
+        // Make smallListA and smallListB differ in
+        // content, but have the same size
+        smallListA.add("rope jumping");
+        assertFalse(smallListA.equals(smallListB));
+
+        // Replace the last element in smallListA
+        // to make smallListA and smallListB equal again
+        smallListA.remove("rope jumping");
+        smallListA.add("jump roping");
+        assertEquals(smallListA, smallListB);
     }
 
 
     /**
-     * Tests the add method. Ensures that it adds the object is added at the end
-     * and the size is increased
+     * Tests the equals method on a list with a large number of items in it
      */
-    public void testAdd() {
-        assertEquals(0, list.size());
-        list.add("A");
-        assertEquals(1, list.size());
-        list.add("B");
-        assertEquals(2, list.size());
-        assertEquals("B", list.get(1));
+    public void testEqualsBigList() {
+        assertEquals(bigListA, bigListA);
+        assertEquals(bigListA, bigListB);
+        assertFalse(bigListA.equals(nullObject));
+        assertFalse(bigListA.equals("soccer"));
+        assertFalse(bigListA.equals(smallListA));
+        assertFalse(bigListA.equals(emptyListA));
+        bigListB.add("jump roping");
+        assertFalse(bigListA.equals(bigListB));
+
+        // Same content, same size, but reversed
+        bigListB.clear();
+        assertFalse(bigListA.equals(bigListB));
+        for (int i = 100; i > 0; i--) {
+            bigListB.add("sport" + i);
+        }
+        assertFalse(bigListA.equals(bigListB));
+
+        // one a subset of the other but with dups
+        bigListB.clear();
+        assertFalse(bigListA.equals(bigListB));
+        for (int i = 0; i < 50; i++) {
+            bigListB.add("sport" + i);
+        }
+        for (int i = 0; i < 50; i++) {
+            bigListB.add("sport" + i);
+        }
+        assertFalse(bigListA.equals(bigListB));
+
+        // make them equal again
+        bigListB.clear();
+        assertFalse(bigListA.equals(bigListB));
+        for (int i = 0; i < 100; i++) {
+            bigListB.add("sport" + i);
+        }
+        assertEquals(bigListA, bigListB);
 
     }
 
 
     /**
-     * Tests that objects can be added at the beginning and end and that they
-     * are placed correctly
+     * Tests the toArray method on an empty list
      */
-    public void testAddIndex() {
-        list.add("B");
-        list.add(0, "A");
-        assertEquals("A", list.get(0));
-        assertEquals(2, list.size());
-        list.add(2, "D");
-        assertEquals("D", list.get(2));
-        list.add(2, "C");
-        assertEquals("C", list.get(2));
+    public void testToArrayEmpty() {
+
+        Object[] emptyArray = {};
+        assertTrue(Arrays.equals(emptyListA.toArray(), emptyArray));
+        assertTrue(Arrays.equals(emptyListA.toArray(), emptyListB.toArray()));
+        assertFalse(Arrays.equals(emptyListA.toArray(), smallListB.toArray()));
+        Object[] oneItemArray = { "one thing" };
+        emptyListA.add("one thing");
+        assertTrue(Arrays.equals(emptyListA.toArray(), oneItemArray));
+
     }
 
 
     /**
-     * This tests that the add method throws a null pointer exception when
-     * adding null data to the list
+     * Tests the toArray method on a list with items in it
      */
-    public void testAddNullException() {
-        Exception e = null;
-        try {
-            list.add(null);
-        }
-        catch (Exception exception) {
-            e = exception;
-        }
-        assertTrue(e instanceof IllegalArgumentException);
+    public void testToArrayContents() {
+
+        Object[] origArray = { "soccer", "swimming", "gymnastics" };
+        assertTrue(Arrays.equals(smallListA.toArray(), origArray));
+        assertTrue(Arrays.equals(emptyListA.toArray(), emptyListB.toArray()));
+        assertFalse(Arrays.equals(smallListA.toArray(), bigListB.toArray()));
+
     }
 
 
     /**
-     * This tests that the add method throws a Invalid argument when adding null
-     * data to the list
+     * test add method
      */
-    public void testAddIndexNullException() {
-        Exception e = null;
-        try {
-            list.add(0, null);
-        }
-        catch (Exception exception) {
-            e = exception;
-        }
-        assertTrue(e instanceof IllegalArgumentException);
-    }
-
-
-    /**
-     * This tests when the add method is called and the index is greater than
-     * size or less than zero
-     */
-    public void testAddException() {
-        list.add("A");
-        Exception e = null;
-        try {
-            list.add(2, "B");
-        }
-        catch (Exception exception) {
-            e = exception;
-        }
-        assertTrue(e instanceof IndexOutOfBoundsException);
-        e = null;
-        try {
-            list.add(-1, "B");
-        }
-        catch (Exception exception) {
-            e = exception;
-        }
-        assertTrue(e instanceof IndexOutOfBoundsException);
-    }
-
-
-    /**
-     * Tests removing a object changes the size appropiately and that you can
-     * remove the first and last elements
-     */
-    public void testRemoveObj() {
-        assertFalse(list.remove(null));
-        list.add("A");
-        list.add("B");
-        assertTrue(list.remove("A"));
-        assertEquals("B", list.get(0));
-        assertEquals(1, list.size());
-        list.add("C");
-        assertTrue(list.remove("C"));
-        assertEquals("B", list.get(0));
-    }
-
-
-    /**
-     * Tests get when the index is greater than or equal to size and when the
-     * index is less than zero
-     */
-    public void testGetException() {
+    public void testAddWithIndex() {
+        assertEquals(0, emptyListA.size());
         Exception exception = null;
         try {
-            list.get(-1);
+            emptyListA.add(0, nullObject);
         }
         catch (Exception e) {
             exception = e;
         }
-        assertTrue(exception instanceof IndexOutOfBoundsException);
+        assertNotNull(exception);
+        assertTrue(exception instanceof IllegalArgumentException);
+
         exception = null;
-        list.add("A");
         try {
-            list.get(1);
+            emptyListA.add(-1, "plsWebCat");
         }
-        catch (IndexOutOfBoundsException e) {
+        catch (Exception e) {
             exception = e;
         }
+        assertNotNull(exception);
         assertTrue(exception instanceof IndexOutOfBoundsException);
+
+        exception = null;
+        try {
+            emptyListA.add(emptyListA.size() + 1, "plsWebCat");
+        }
+        catch (Exception e) {
+            exception = e;
+        }
+        assertNotNull(exception);
+        assertTrue(exception instanceof IndexOutOfBoundsException);
+
+        emptyListA.add(0, "plsWebCat");
+        assertEquals(1, emptyListA.size());
+
+        emptyListA.add(1, "plsWebCatAgain");
+        assertEquals(2, emptyListA.size());
+
+        exception = null;
+        try {
+            emptyListA.add(nullObject);
+        }
+        catch (Exception e) {
+            exception = e;
+        }
+        assertNotNull(exception);
+        assertTrue(exception instanceof IllegalArgumentException);
+
+        smallListA.add(0, "basketball");
+        assertEquals(smallListA.size(), 4);
+
     }
 
 
     /**
-     * Test contains when it does and does not contain the object
+     * test remove with object
+     */
+    public void testRemoveWithObject() {
+        assertEquals(3, smallListA.size());
+        // size
+        assertFalse(smallListA.remove("Hokeis"));
+        assertTrue(smallListA.remove("swimming"));
+        assertEquals(2, smallListA.size());
+        assertTrue(smallListA.remove("gymnastics"));
+        assertEquals(1, smallListA.size());
+        assertFalse(smallListA.remove("webCat"));
+
+        assertEquals(emptyListA.size(), 0);
+        emptyListA.add("testingIsGood");
+        assertEquals(emptyListA.size(), 1);
+        assertTrue(emptyListA.remove("testingIsGood"));
+        assertEquals(emptyListA.size(), 0);
+        // remove when list is empty
+        assertFalse(emptyListA.remove("BeatFlorida"));
+
+    }
+
+
+    /**
+     * test remove with index
+     */
+    public void testRemoveWithIndex() {
+        // empty list
+        Exception exception = null;
+        try {
+            emptyListA.remove(2);
+        }
+        catch (Exception e) {
+            exception = e;
+        }
+        assertNotNull(exception);
+        assertTrue(exception instanceof IndexOutOfBoundsException);
+
+        // index is negative
+        exception = null;
+        try {
+            smallListA.remove(-1);
+        }
+        catch (Exception e) {
+            exception = e;
+        }
+        assertNotNull(exception);
+        assertTrue(exception instanceof IndexOutOfBoundsException);
+
+        // index is too big
+        exception = null;
+        try {
+            smallListA.remove(smallListA.size() + 1);
+        }
+        catch (Exception e) {
+            exception = e;
+        }
+        assertNotNull(exception);
+        assertTrue(exception instanceof IndexOutOfBoundsException);
+        // index exists
+        assertTrue(smallListA.remove(2));
+        assertTrue(smallListA.remove(1));
+        assertEquals(smallListA.size(), 1);
+        assertTrue(smallListA.remove(1));
+
+        assertTrue(smallListB.remove(0));
+
+        exception = null;
+        try {
+            smallListB.remove(3);
+        }
+        catch (Exception e) {
+            exception = e;
+        }
+        assertNotNull(exception);
+        assertTrue(exception instanceof IndexOutOfBoundsException);
+
+    }
+
+
+    /**
+     * test get method
+     */
+    public void testGet() {
+        Exception exception = null;
+        try {
+            emptyListA.get(2);
+        }
+        catch (Exception e) {
+            exception = e;
+        }
+        assertNotNull(exception);
+        assertTrue(exception instanceof IndexOutOfBoundsException);
+
+        exception = null;
+        try
+
+        {
+            emptyListA.get(2);
+        }
+        catch (Exception e) {
+            exception = e;
+        }
+
+        assertNotNull(exception);
+        assertTrue(exception instanceof IndexOutOfBoundsException);
+
+        assertEquals("swimming", smallListA.get(1));
+    }
+
+
+    /**
+     * test contains
      */
     public void testContains() {
-        assertFalse(list.contains("A"));
-        list.add("A");
-        assertTrue(list.contains("A"));
-        assertFalse(list.contains("B"));
-        list.add("B");
-        assertTrue(list.contains("B"));
+        assertEquals(emptyListA.contains("webcat"), false);
+        assertTrue(smallListA.contains("swimming"));
     }
 
 
     /**
-     * Tests isEmpty when empty and full
+     * test empty method
      */
-    public void testIsEmpty() {
-        assertTrue(list.isEmpty());
-        list.add("A");
-        assertFalse(list.isEmpty());
+    public void testEmpty() {
+        assertEquals(3, smallListA.size());
+        smallListA.clear();
+        assertEquals(0, smallListA.size());
+        assertTrue(smallListA.isEmpty());
+        emptyListA.clear();
+        assertTrue(emptyListA.isEmpty());
     }
 
 
     /**
-     * Ensures that all of the objects are cleared and the size is changed
+     * test lastIndexOf method
      */
-    public void testClear() {
-        list.add("A");
-        list.clear();
-        assertEquals(0, list.size());
-        assertFalse(list.contains("A"));
+    public void testLastIndexOf() {
+        assertEquals(1, smallListA.lastIndexOf("swimming"));
+        bigListB.add("item");
+        assertEquals(25, bigListB.lastIndexOf("sport25"));
     }
 
 
     /**
-     * Tests the toString when there are 0, 1, and 2 objects in the list
+     * test toString
      */
     public void testToString() {
-        assertEquals("{}", list.toString());
-        list.add("A");
-        assertEquals("{A}", list.toString());
-        list.add("B");
-        assertEquals("{A, B}", list.toString());
-    }
-
-
-    /**
-     * Tests removing from an empty list
-     */
-    public void testRemoveFromEmpty() {
-        list.add("dance");
-        list.add(0, "safety");
-        list.clear();
-        assertFalse(list.remove("safety"));
-        Exception exception;
-        exception = null;
-        try {
-            list.remove(0);
-        }
-        catch (IndexOutOfBoundsException e) {
-            exception = e;
-        }
-        assertTrue(exception instanceof IndexOutOfBoundsException);
-
-        LinkedList<String> emptyList = new LinkedList<String>();
-        exception = null;
-        try {
-            emptyList.remove(0);
-        }
-        catch (IndexOutOfBoundsException e) {
-            exception = e;
-        }
-        assertTrue(exception instanceof IndexOutOfBoundsException);
+        assertEquals("{}", emptyListA.toString());
+        assertEquals("{soccer, swimming, gymnastics}", smallListA.toString());
     }
 
 
@@ -278,19 +383,11 @@ public class LinkedListTest extends TestCase {
      * Tests all the methods in the private class DLListIterator
      */
     public void testIterator() {
+        list = new LinkedList<String>();
         Iterator<String> itr = list.iterator();
         list.add("vanilla");
         list.add("chocolate");
         list.add("strawberry");
-
-        Exception thrown = null;
-        try {
-            itr.remove();
-        }
-        catch (IllegalStateException e) {
-            thrown = e;
-        }
-        assertNotNull(thrown);
         assertTrue(itr.hasNext());
         assertEquals(list.size(), 3);
         assertEquals(itr.next(), "vanilla");
@@ -304,7 +401,7 @@ public class LinkedListTest extends TestCase {
         assertEquals(list.size(), 0);
         assertFalse(itr.hasNext());
 
-        thrown = null;
+        Exception thrown = null;
         try {
             itr.next();
         }

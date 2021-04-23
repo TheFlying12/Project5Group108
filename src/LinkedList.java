@@ -2,29 +2,24 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-/**
- * This provides implementation for some of the LList methods.
- * 
- * @author Patrick Stock (pstock)
- * @version 4/25/21
- * @param <E>
- *            The type of object the class will store
- */
 public class LinkedList<E> {
 
     /**
-     * This represents a node in a doubly linked list. This node stores data, a
-     * pointer to the node before it in the list, and a pointer to the node
-     * after it in the list
+     * This represents a node in a singly linked list. This node stores data
+     * along with having a pointer to the next node in the list
      *
-     * @param <E>
-     *            This is the type of object that this class will store
-     * @author Mark Wiggans (mmw125)
-     * @version 4/14/2015
+     * @param <D>
+     * @author tejus (tejusj)
+     * @version 4/25/2021
+     * 
      */
-    private static class Node<E> {
-        private Node<E> next;
-        private E data;
+    public static class Node<D> {
+
+        // The data element stored in the node.
+        private D data;
+
+        // The next node in the sequence.
+        private Node<D> next;
 
         /**
          * Creates a new node with the given data
@@ -32,7 +27,7 @@ public class LinkedList<E> {
          * @param d
          *            the data to put inside the node
          */
-        public Node(E d) {
+        public Node(D d) {
             data = d;
         }
 
@@ -43,7 +38,7 @@ public class LinkedList<E> {
          * @param n
          *            the node after this one
          */
-        public void setNext(Node<E> n) {
+        public void setNext(Node<D> n) {
             next = n;
         }
 
@@ -53,7 +48,7 @@ public class LinkedList<E> {
          *
          * @return the next node
          */
-        public Node<E> next() {
+        public Node<D> next() {
             return next;
         }
 
@@ -63,54 +58,23 @@ public class LinkedList<E> {
          *
          * @return the data in the node
          */
-        public E getData() {
+        public D getData() {
             return data;
         }
     }
 
-    /**
-     * How many nodes are in the list
-     */
+    private Node<E> head;
+
+    // the size of the linked list
     private int size;
 
     /**
-     * The first node in the list. THIS IS A SENTINEL NODE AND AS SUCH DOES NOT
-     * HOLD ANY DATA. REFER TO init()
-     */
-    private Node<E> head;
-
-    /**
-     * The last node in the list. THIS IS A SENTINEL NODE AND AS SUCH DOES NOT
-     * HOLD ANY DATA. REFER TO init()
-     */
-    private Node<E> tail;
-
-    /**
-     * Create a new DLList object.
+     * Creates a new LinkedList object
      */
     public LinkedList() {
-        init();
-    }
-
-
-    /**
-     * Initializes the object to have the head and tail nodes
-     */
-    private void init() {
-        head = new LinkedList.Node<E>(null);
-        tail = new LinkedList.Node<E>(null);
-        head.setNext(tail);
+        head = null;
         size = 0;
-    }
 
-
-    /**
-     * Checks if the array is empty
-     *
-     * @return true if the array is empty
-     */
-    public boolean isEmpty() {
-        return size == 0;
     }
 
 
@@ -119,69 +83,16 @@ public class LinkedList<E> {
      *
      * @return the number of elements
      */
+
     public int size() {
         return size;
     }
 
 
     /**
-     * Removes all of the elements from the list
-     */
-    public void clear() {
-        init();
-    }
-
-
-    /**
-     * Checks if the list contains the given object
-     *
-     * @param obj
-     *            the object to check for
-     * @return true if it contains the object
-     */
-    public boolean contains(E obj) {
-        Node<E> curr = head;
-        while (curr.next() != null) {
-            if (curr.getData().equals(obj)) {
-                return true;
-            }
-            else {
-                curr = curr.next();
-            }
-
-        }
-        return false;
-    }
-
-
-    /**
-     * Gets the object at the given position
-     *
-     * @param index
-     *            where the object is located
-     * @return The object at the given position
-     * @throws IndexOutOfBoundsException
-     *             if there no node at the given index
-     */
-    public E get(int index) {
-        return getNodeAtIndex(index).getData();
-    }
-
-
-    /**
-     * Adds a element to the end of the list
-     *
-     * @param newEntry
-     *            the element to add to the end
-     */
-    public void add(E newEntry) {
-        add(size(), newEntry);
-    }
-
-
-    /**
      * Adds the object to the position in the list
      *
+     * @precondition obj cannot be null
      * @param index
      *            where to add the object
      * @param obj
@@ -192,109 +103,266 @@ public class LinkedList<E> {
      *             if obj is null
      */
     public void add(int index, E obj) {
-        if (index < 0 || size < index) {
-            throw new IndexOutOfBoundsException();
-        }
+        // check if the object is null
         if (obj == null) {
-            throw new IllegalArgumentException("Cannot add null "
-                + "objects to a list");
+            throw new IllegalArgumentException("Object is null");
         }
 
-        Node<E> nodeAfter;
-        if (index == size) {
-            nodeAfter = tail;
+        // check if the index is out of bounds
+        if ((index < 0) || (index > size())) {
+            throw new IndexOutOfBoundsException("Index is out of bounds");
         }
+
+        Node<E> current = head;
+
+        // empty stack case
+        if (isEmpty()) {
+            head = new Node<E>(obj);
+        }
+
+        // all other cases
         else {
-            nodeAfter = getNodeAtIndex(index);
-        }
+            if (index == 0) {
+                Node<E> newNode = new Node<E>(obj);
+                newNode.setNext(head);
+                head = newNode;
+            }
+            else {
+                int currentIndex = 0;
+                while (current != null) {
+                    if ((currentIndex + 1) == index) {
+                        Node<E> nextNext = current.next;
+                        Node<E> newNode = new Node<E>(obj);
+                        current.setNext(newNode);
+                        newNode.setNext(nextNext);
 
-        Node<E> addition = new Node<E>(obj);
-        addition.setNext(nodeAfter);
+                    }
+                    currentIndex++;
+                    current = current.next();
+                }
+            }
+        }
         size++;
-
     }
 
 
     /**
-     * gets the node at that index
-     * 
-     * @param index
-     * @return node at index
-     */
-    private Node<E> getNodeAtIndex(int index) {
-        if (index < 0 || size() <= index) {
-            throw new IndexOutOfBoundsException("No element exists at "
-                + index);
-        }
-        Node<E> current = head.next(); // as we have a sentinel node
-        for (int i = 0; i < index; i++) {
-            current = current.next();
-        }
-        return current;
-    }
-
-
-    /**
-     * Removes the element at the specified index from the list
+     * Adds the object to the end of the list.
      *
-     * @param index
-     *            where the object is located
-     * @throws IndexOutOfBoundsException
-     *             if there is not an element at the index
-     * @return true if successful
+     * @precondition obj cannot be null
+     * @param obj
+     *            the object to add
+     * @throws IllegalArgumentException
+     *             if obj is null
      */
-    public boolean remove(int index) {
-        // If linked list is empty
-        if (head == null)
-            return false;
 
-        // Store head node
-        LinkedList.Node<E> temp = head;
-
-        // If head needs to be removed
-        if (index == 0) {
-            head = temp.next; // Change head
-            return true;
+    public void add(E obj) {
+        // check if the object is null
+        if (obj == null) {
+            throw new IllegalArgumentException("Object is null");
         }
 
-        // Find previous node of the node to be deleted
-        for (int i = 0; temp != null && i < index - 1; i++)
-            temp = temp.next;
+        Node<E> current = head;
 
-        // If position is more than number of nodes
-        if (temp == null || temp.next == null)
-            return false;
+        // empty stack case
+        if (isEmpty()) {
+            head = new Node<E>(obj);
+        }
 
-        // Node temp->next is the node to be deleted
-        // Store pointer to the next of node to be deleted
-        Node<E> next = temp.next.next;
-
-        temp.next = next; // Unlink the deleted node from list
-        return true;
+        // other cases
+        else {
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.setNext(new Node<E>(obj));
+        }
+        size++;
     }
 
 
     /**
-     * Removes the first object in the list that .equals(obj)
+     * Checks if the array is empty
+     *
+     * @return true if the array is empty
+     */
+
+    public boolean isEmpty() {
+        return (size == 0);
+    }
+
+
+    /**
+     * Removes the first instance of the given object from the list
      *
      * @param obj
      *            the object to remove
-     * @return true if the object was found and removed
+     * @return true if successful
      */
 
     public boolean remove(E obj) {
-        Node<E> current = head.next();
-        Node<E> currPrev = head;
-        while (!current.equals(tail)) {
-            if (current.getData().equals(obj)) {
-                currPrev.next = current.next();
+        Node<E> current = head;
+
+        // account for matching head
+        if ((null != head) && (obj.equals(current.data))) {
+            head = head.next;
+            size--;
+            return true;
+        }
+
+        // account for 2+ size
+        while (size() >= 2 && (current.next != null)) {
+            if ((obj.equals(current.next.data))) {
+                if (current.next.next != null) {
+                    current.setNext(current.next.next);
+                }
+                else {
+                    current.setNext(null);
+                }
                 size--;
                 return true;
             }
-            current = current.next();
-            currPrev = currPrev.next();
+            current = current.next;
         }
+
+        // this accounts for the isEmpty case or the object does not exist
         return false;
+    }
+
+
+    /**
+     * Removes the object at the given position
+     *
+     * @param index
+     *            the position of the object
+     * @return true if the removal was successful
+     * @throws IndexOutOfBoundsException
+     *             if there is not an element at the index
+     */
+
+    public boolean remove(int index) {
+        // if the index is invalid
+        if (index < 0 || head == null) {
+            throw new IndexOutOfBoundsException("Index is out of bounds");
+        }
+        else {
+            Node<E> current = head;
+            int currentIndex = 0;
+            if (size == 1) {
+                head = null;
+                size--;
+                return true;
+            }
+            if (index == 0) {
+                head = head.next;
+                size--;
+                return true;
+            }
+            while (current.next != null) {
+                if ((currentIndex + 1) == index) {
+                    Node<E> newNext = current.next.next;
+                    current.setNext(newNext);
+                    size--;
+                    return true;
+                }
+
+                current = current.next;
+                currentIndex++;
+            }
+
+            // if the element was never found, this also handles empty case
+            throw new IndexOutOfBoundsException("Index is out of bounds");
+        }
+    }
+
+
+    /**
+     * Gets the object at the given position
+     *
+     * @param index
+     *            where the object is located
+     * @return The object at the given position
+     * @throws IndexOutOfBoundsException
+     *             if no node at the given index
+     */
+
+    public E get(int index) {
+        Node<E> current = head;
+        int currentIndex = 0;
+        E data = null;
+
+        while (current != null) {
+            if (currentIndex == index) {
+                data = current.data;
+            }
+            currentIndex++;
+            current = current.next;
+        }
+
+        // check if the data was null...
+        if (data == null) {
+            // ... if so throw an exception
+            throw new IndexOutOfBoundsException("Index exceeds the size.");
+        }
+        return data;
+    }
+
+
+    /**
+     * Checks if the list contains the given object
+     *
+     * @param obj
+     *            the object to check for
+     * @return true if it contains the object
+     */
+
+    public boolean contains(E obj) {
+        Node<E> current = head;
+        while (current != null) {
+            if (obj.equals(current.data)) {
+                return true;
+            }
+            current = current.next;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Removes all of the elements from the list
+     */
+
+    public void clear() {
+        // make sure we don't call clear on an empty list
+        if (head != null) {
+            head.setNext(null);
+            head = null;
+            size = 0;
+        }
+    }
+
+
+    /**
+     * Gets the last time the given object is in the list
+     *
+     * @param obj
+     *            the object to look for
+     * @return the last position of it. -1 If it is not in the list
+     */
+
+    public int lastIndexOf(E obj) {
+        int lastIndex = -1;
+        Node<E> current = head;
+        int currentIndex = 0;
+        while (current != null) {
+            if (obj.equals(current.data)) {
+                lastIndex = currentIndex;
+            }
+            currentIndex++;
+            current = current.next;
+
+        }
+        return lastIndex;
     }
 
 
@@ -304,23 +372,79 @@ public class LinkedList<E> {
      *
      * @return a string representing the list
      */
-    @Override
+
     public String toString() {
-        StringBuilder builder = new StringBuilder("{");
-        if (!isEmpty()) {
-            Node<E> currNode = head.next();
-            while (currNode != tail) {
-                E element = currNode.getData();
-                builder.append(element.toString());
-                if (currNode.next != tail) {
-                    builder.append(", ");
+        String result = "{";
+
+        Node<E> current = head;
+        while (current != null) {
+            result += "" + current.data;
+            current = current.next;
+            if (current != null) {
+                result += ", ";
+            }
+        }
+        result += "}";
+        return result;
+    }
+
+
+    /**
+     * Returns an array representation of the list If a list contains A, B, and
+     * C, the following should be returned {A, B, C}, If a list
+     * contains A, B, C, and C the following should be returned {A, B, C, C}
+     *
+     * @return an array representing the list
+     */
+    public Object[] toArray() {
+
+        Object[] array = new Object[this.size()];
+
+        Node<E> current = head;
+        int count = 0;
+        while (current != null) {
+            array[count] = current.getData();
+            current = current.next;
+            count++;
+        }
+
+        return array;
+    }
+
+
+    /**
+     * Returns true if both lists have the exact same contents
+     * in the exact same order
+     *
+     * @return a boolean of whether two lists have the same contents,
+     *         item per item and in the same order
+     */
+
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() == obj.getClass()) {
+            @SuppressWarnings("unchecked")
+            LinkedList<E> other = ((LinkedList<E>)obj);
+            if (other.size() == this.size()) {
+                Node<E> current = head;
+                Node<E> otherCurrent = other.head;
+                while (current != null) {
+                    if (!current.getData().equals(otherCurrent.getData())) {
+                        return false;
+                    }
+                    current = current.next();
+                    otherCurrent = otherCurrent.next();
                 }
-                currNode = currNode.next();
+                return true;
             }
         }
 
-        builder.append("}");
-        return builder.toString();
+        return false;
     }
 
 
@@ -350,9 +474,9 @@ public class LinkedList<E> {
          *
          * @return true if there are more elements in the list
          */
-        @Override
+
         public boolean hasNext() {
-            return current.next() != tail;
+            return current.next() != null;
         }
 
 
@@ -363,7 +487,7 @@ public class LinkedList<E> {
          * @throws NoSuchElementException
          *             if there are no nodes left in the list
          */
-        @Override
+
         public E next() {
             if (this.hasNext()) {
                 current = current.next();
@@ -373,4 +497,5 @@ public class LinkedList<E> {
         }
 
     }
+
 }
