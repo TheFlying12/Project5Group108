@@ -54,12 +54,4 @@ public class DataReader {
         
         return newStates;
     }
-
-
-    /**
-     * Getter method for states for testing
-     */
-    public LinkedList<State> getStates() {
-        return states;
-    }
 }
