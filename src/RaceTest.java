@@ -1,5 +1,3 @@
-package backend;
-
 import student.TestCase;
 
 /**
