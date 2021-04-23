@@ -384,23 +384,14 @@ public class LinkedListTest extends TestCase {
      */
     public void testIterator() {
         list = new LinkedList<String>();
-        Iterator<String> itr = list.iterator();
+
         list.add("vanilla");
         list.add("chocolate");
         list.add("strawberry");
+        Iterator<String> itr = list.iterator();
         assertTrue(itr.hasNext());
-        assertEquals(list.size(), 3);
-        assertEquals(itr.next(), "vanilla");
-        itr.remove();
-        assertEquals(list.size(), 2);
-        assertEquals(itr.next(), "chocolate");
-        itr.remove();
-        assertEquals(list.size(), 1);
-        assertEquals(itr.next(), "strawberry");
-        itr.remove();
-        assertEquals(list.size(), 0);
-        assertFalse(itr.hasNext());
-
+        itr.next();
+        itr.next();
         Exception thrown = null;
         try {
             itr.next();

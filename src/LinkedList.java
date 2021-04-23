@@ -476,6 +476,7 @@ public class LinkedList<E> {
          */
 
         public boolean hasNext() {
+
             return current.next() != null;
         }
 
