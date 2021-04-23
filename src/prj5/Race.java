@@ -1,3 +1,5 @@
+package prj5;
+
 /**
  * This class represents a Race object which has a name and numbers for infected
  * and dead people

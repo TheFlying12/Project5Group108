@@ -1,7 +1,7 @@
 /**
  * 
  */
-package covid;
+package prj5;
 
 /**
  * @author Shanmuganathan Somashekar (shans)
