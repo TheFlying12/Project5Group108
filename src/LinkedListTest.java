@@ -1,7 +1,7 @@
+
 /**
  *
  */
-package doublylinkedlist;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -10,24 +10,21 @@ import student.TestCase;
 /**
  * This class tests all the methods in the DLList class
  * 
- * @author Eric
- * @author maellis1
- * @version 11-2-15
  * @author Patrick Stock (pstock)
- * @version 3/25/21
+ * @version 4/25/21
  */
-public class DLListTest extends TestCase {
+public class LinkedListTest extends TestCase {
     /**
      * the list we will use
      */
-    private DLList<String> list;
+    private LinkedList<String> list;
 
     /**
      * run before every test case
      */
     @Override
     public void setUp() {
-        list = new DLList<String>();
+        list = new LinkedList<String>();
     }
 
 
@@ -215,24 +212,6 @@ public class DLListTest extends TestCase {
 
 
     /**
-     * Test lastIndexOf when the list is empty, when the object is not in the
-     * list, and when it is at the beginning or end
-     */
-    public void testLastIndexOf() {
-        assertEquals(-1, list.lastIndexOf("A"));
-        list.add("A");
-        assertEquals(0, list.lastIndexOf("A"));
-        list.add("A");
-        assertEquals(1, list.lastIndexOf("A"));
-        list.add("B");
-        assertEquals(1, list.lastIndexOf("A"));
-        assertEquals(2, list.lastIndexOf("B"));
-        list.add("A");
-        assertEquals(3, list.lastIndexOf("A"));
-    }
-
-
-    /**
      * Tests isEmpty when empty and full
      */
     public void testIsEmpty() {
@@ -283,7 +262,7 @@ public class DLListTest extends TestCase {
         }
         assertTrue(exception instanceof IndexOutOfBoundsException);
 
-        DLList<String> emptyList = new DLList<String>();
+        LinkedList<String> emptyList = new LinkedList<String>();
         exception = null;
         try {
             emptyList.remove(0);
@@ -335,44 +314,4 @@ public class DLListTest extends TestCase {
         assertNotNull(thrown);
     }
 
-
-    /**
-     * Tests all the methods in the private class RDLListIterator
-     */
-    public void testReverseIterator() {
-        Iterator<String> itr = list.reverseIterator();
-        list.add("vanilla");
-        list.add("chocolate");
-        list.add("strawberry");
-
-        Exception thrown = null;
-        try {
-            itr.remove();
-        }
-        catch (IllegalStateException e) {
-            thrown = e;
-        }
-        assertNotNull(thrown);
-        assertTrue(itr.hasNext());
-        assertEquals(list.size(), 3);
-        assertEquals(itr.next(), "strawberry");
-        itr.remove();
-        assertEquals(list.size(), 2);
-        assertEquals(itr.next(), "chocolate");
-        itr.remove();
-        assertEquals(list.size(), 1);
-        assertEquals(itr.next(), "vanilla");
-        itr.remove();
-        assertEquals(list.size(), 0);
-        assertFalse(itr.hasNext());
-
-        thrown = null;
-        try {
-            itr.next();
-        }
-        catch (NoSuchElementException e) {
-            thrown = e;
-        }
-        assertNotNull(thrown);
-    }
 }
