@@ -1,6 +1,5 @@
 package prj5;
 
-
 /**
  *
  */
@@ -10,6 +9,12 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import student.TestCase;
 
+/**
+ * test linked list class
+ * 
+ * @author tejus
+ * @version 4/25/2021
+ */
 public class LinkedListTest extends TestCase {
 
     private LinkedList<String> emptyListA;
@@ -18,7 +23,6 @@ public class LinkedListTest extends TestCase {
     private LinkedList<String> smallListB;
     private LinkedList<String> bigListA;
     private LinkedList<String> bigListB;
-    private LinkedList<String> list;
     private String nullObject;
 
     /**
@@ -385,7 +389,7 @@ public class LinkedListTest extends TestCase {
      * Tests all the methods in the private class DLListIterator
      */
     public void testIterator() {
-        list = new LinkedList<String>();
+        LinkedList<String> list = new LinkedList<String>();
 
         list.add("vanilla");
         list.add("chocolate");

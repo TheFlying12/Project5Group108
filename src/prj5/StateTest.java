@@ -10,9 +10,6 @@ import student.TestCase;
 
 public class StateTest extends TestCase {
     private State state;
-    private Race race;
-    private Race race1;
-    private Race race2;
     private LinkedList<Race> races;
 
     /**
@@ -20,9 +17,9 @@ public class StateTest extends TestCase {
      */
     public void setUp() {
 
-        race = new Race("white", 5, 10);
-        race1 = new Race("black", 54, 10);
-        race2 = new Race("asian", 57, 100);
+        Race race = new Race("white", 5, 10);
+        Race race1 = new Race("black", 54, 10);
+        Race race2 = new Race("asian", 57, 100);
         races = new LinkedList<Race>();
         races.add(race);
         races.add(race1);

@@ -11,28 +11,51 @@ package prj5;
 public class State {
     private String name;
     private LinkedList<Race> races;
-    
 
     /**
      * This class gets the data releated to the state
+     * 
+     * @param name
+     *            name of state
+     * @param races
+     *            linked list of races
      */
     public State(String name, LinkedList<Race> races) {
         this.name = name;
         this.races = races;
     }
+
+
     /**
      * this method gets the name
-     * @return
+     * 
+     * @return name
+     *         name of thing
      */
     public String getName() {
         return name;
     }
+
+
     /**
-     * this method returns the races. 
-     * @return
+     * this method returns the races.
+     * 
+     * @return races
+     *         all of the races
      */
     public LinkedList<Race> getRaces() {
-        return races; 
+        return races;
+    }
+
+
+    /**
+     * convert the state to a string representation
+     */
+    public void convertToString() {
+        for (int i = 0; i < this.races.size(); i++) {
+            System.out.println(this.getRaces().get(i).toString());
+        }
+
     }
 
 }

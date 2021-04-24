@@ -1,5 +1,7 @@
 package prj5;
 
+import java.text.DecimalFormat;
+
 /**
  * This class represents a Race object which has a name and numbers for infected
  * and dead people
@@ -12,6 +14,7 @@ public class Race {
     private String name;
     private int infected;
     private int deaths;
+    private DecimalFormat deci;
 
     /**
      * Creates a new Race object
@@ -27,6 +30,7 @@ public class Race {
         name = n;
         infected = inf;
         deaths = de;
+        deci = new DecimalFormat("0.#");
     }
 
 
@@ -42,6 +46,9 @@ public class Race {
 
     /**
      * Setter method for the name
+     * 
+     * @param name
+     *            name to be set
      */
     public void setName(String name) {
         this.name = name;
@@ -60,6 +67,9 @@ public class Race {
 
     /**
      * Setter method for the infected people
+     * 
+     * @param inf
+     *            thing to get points
      */
     public void setInfected(int inf) {
         infected = inf;
@@ -78,6 +88,9 @@ public class Race {
 
     /**
      * Setter method for the dead people
+     * 
+     * @param de
+     *            total deaths
      */
     public void setDeaths(int de) {
         deaths = de;
@@ -90,6 +103,9 @@ public class Race {
      * @return the ratio of dead people to infected people
      */
     public float getRatio() {
+        if (infected == -1 || deaths == -1) {
+            return (float)-.01;
+        }
         return (float)deaths / (float)infected;
     }
 
@@ -111,5 +127,15 @@ public class Race {
         else {
             return -1;
         }
+    }
+
+
+    /**
+     * @return string of Race
+     */
+    public String toString() {
+        String str = this.getName().toLowerCase() + ": " + this.infected
+            + " cases, " + deci.format(this.getRatio() * 100) + "% CFR";
+        return str;
     }
 }

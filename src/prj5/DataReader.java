@@ -19,8 +19,7 @@ public class DataReader {
      * 
      * @throws ParseException
      */
-    public DataReader(String fileName)
-        throws FileNotFoundException {
+    public DataReader(String fileName) throws FileNotFoundException {
         states = readFile(fileName);
     }
 
@@ -29,41 +28,59 @@ public class DataReader {
         throws FileNotFoundException {
         Scanner file = new Scanner(new File(fileName));
         LinkedList<State> newStates = new LinkedList<State>();
-        LinkedList<Race> newRaces = new LinkedList<Race>();
-        String[] line = file.nextLine().split("Cases_");
+        String[] racesNames = readRaces(file.nextLine().toString().split(
+            ","));
+        String[] line;
+        String stateName;
+        LinkedList<Race> newRaces;
+        int deaths;
+        int infected;
 
-        for (int i = 1; i < line.length - 1; i++) {
-            newRaces.add(new Race(line[i], 0, 0));
-        }
-        newRaces.add(new Race("Other", 0, 0));
+        while (file.hasNextLine()) {
+            newRaces = new LinkedList<Race>();
+            line = file.nextLine().toString().split(", *");
+            stateName = line[0];
+            for (int i = 0; i < racesNames.length; i++) {
+                deaths = isValid(line[i + 1 + racesNames.length]);
+                infected = isValid(line[i + 1]);
 
-        while (file.hasNext()) {
-            line = file.nextLine().split(",");
-            for (int i = 1; i < 6; i++) {
-                if (line[i].equals("NA")) {
-                    newRaces.get(i - 1).setInfected(-1);
-                }
-                newRaces.get(i - 1).setInfected(Integer.valueOf(line[i]));
+                newRaces.add(new Race(racesNames[i], infected, deaths));
+
             }
-            for (int i = 6; i < line.length; i++) {
-                if (line[i].equals("NA")) {
-                    newRaces.get(i - 1).setDeaths(-1);
-                }
-                newRaces.get(i - 6).setDeaths(Integer.valueOf(line[i]));
-            }
-            newStates.add(new State(line[0], newRaces));
+            newStates.add(new State(stateName, newRaces));
+
         }
-        for(int i =0; i<newStates.size(); i++) {
-            System.out.println(newStates.get(i).getName());
-            for(int j = 0; j<newStates.get(i).getRaces().size(); j++) {
-            System.out.println(newStates.get(j).getRaces().get(j).getName() +": "+newStates.get(j).getRaces().get(j).getRatio());
-        }
+
+        for (int i = 0; i < newStates.size(); i++) {
+            StateCalculator stateSorter = new StateCalculator(newStates.get(i));
+            System.out.println(newStates.get(i).getName());        
+            stateSorter.sort(true).convertToString();
             System.out.println("=====");
+            stateSorter.sort(false).convertToString();
+            System.out.println("=====");
+
         }
 
         return newStates;
     }
-   
-    
-    
+
+
+    private int isValid(String checker) {
+        if (checker.equals("NA")) {
+            return -1;
+        }
+        else {
+            return Integer.valueOf(checker);
+        }
+    }
+
+
+    private String[] readRaces(String[] item) {
+        String[] races = new String[(item.length-1)/2];
+        for (int i = 1; i <= races.length; i++) {
+            races[i - 1] = item[i].replace("Cases_", "");
+        }
+        return races;
+    }
+
 }

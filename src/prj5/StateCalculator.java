@@ -3,8 +3,6 @@
  */
 package prj5;
 
-import prj5.LinkedList.Node;
-
 /**
  * @author Shanmuganathan Somashekar
  * @version 2021.04.23
@@ -12,96 +10,66 @@ import prj5.LinkedList.Node;
  */
 public class StateCalculator {
 
-    private LinkedList<Race> list;
-    private Node<Race> sorted;
+    private State wakanda;
 
-    public StateCalculator(LinkedList<Race> list) {
-        this.list = list;
-
+    /**
+     * 
+     * @param atlantis
+     *            state placeholder
+     */
+    public StateCalculator(State atlantis) {
+        wakanda = atlantis; // not the same in real life but oh well
     }
 
 
-    public LinkedList<Race> getList() {
-        return list;
-
-    }
-
-
-    public void sortAlpha(Node<Race> headref) {
-        // initially, no nodes in sorted list so its set to null
-        sorted = null;
-        Node<Race> current = headref;
-        // traverse the linked list and add sorted node to sorted list
-        while (current != null) {
-            // Store current.next in next
-            Node<Race> next = current.next();
-            // current node goes in sorted list
-            InsertSortedAlpha(current);
-            // now next becomes current
-            current = next;
+    /**
+     * 
+     * @param isAlpha
+     *            whether to sort by alphabetical or by CFR rates
+     *            (true -> alphabetical)
+     * @return
+     *         sorted state with race linked list fully sorted
+     */
+    public State sort(boolean isAlpha) {
+        LinkedList<Race> list = wakanda.getRaces();
+        for (int i = 1; i < list.size(); i++) {
+            Race curr = list.get(i);
+            list.remove(i);
+            int j = i - 1;
+            while (j >= 0 && compareToHelper(curr, list.get(j), isAlpha)) {
+                j--;
+            }
+            list.add(j + 1, curr);
         }
+        return new State(wakanda.getName(), list);
+
     }
 
 
-    // insert a new node in sorted list
-    public void InsertSortedAlpha(Node<Race> newNode) {
-        // for head node
-        if (sorted == null || sorted.getData().compareTo(newNode
-            .getData()) >= 0) {
-            sorted = newNode.next();
-            sorted = newNode;
+    /**
+     * 
+     * @param c
+     *            race being compared
+     * @param pre
+     *            race being compared to
+     * @param isAlpha
+     *            whether sort is alphabetical or not
+     * @return
+     *         compareTo integer to sort list
+     */
+    private boolean compareToHelper(Race c, Race pre, boolean isAlpha) {
+        if (isAlpha) {
+            return (c.getName().compareTo(pre.getName())) < 0;
         }
         else {
-            Node<Race> current = sorted;
-            // find the node and then insert
-            while (current.next() != null && current.next().getData().compareTo(
-                newNode.getData()) < 0) {
-                current = current.next();
+            float compare = c.getRatio() - pre.getRatio();
+            if (compare == 0) {
+                return (c.getName().compareTo(pre.getName())) < 0;
             }
-            newNode.setNext(current.next());
-            current.setNext(newNode);
-        }
-    }
-
-
-    public void sortCFR(Node<Race> headref) {
-        // initially, no nodes in sorted list so its set to null
-        sorted = null;
-        Node<Race> current = headref;
-        // traverse the linked list and add sorted node to sorted list
-        while (current != null) {
-            // Store current.next in next
-            Node<Race> next = current.next();
-            // current node goes in sorted list
-            InsertSortedAlpha(current);
-            // now next becomes current
-            current = next;
-        }
-    }
-
-
-    void Insert_sorted(Node<Race> newNode) {
-        // for head node
-        if (sorted == null || sorted.getData().getRatio() >= newNode.getData()
-            .getRatio()) {
-            newNode.setNext(sorted);
-            sorted = newNode;
-        }
-        else {
-            Node<Race> current = sorted;
-            // find the node and then insert
-            while (current.next() != null && current.next().getData()
-                .getRatio() < newNode.getData().getRatio()) {
-                current = current.next();
+            else {
+                return c.getRatio() - pre.getRatio() > 0;
             }
-            newNode.setNext(current.next());
-            current.setNext(newNode);
         }
-    }
-
-
-    public LinkedList<Race> sortByCFR() {
-        return list;
     }
 
 }

@@ -3,6 +3,13 @@ package prj5;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * linked list this
+ * 
+ * @author tejus
+ *
+ * @param <E>
+ */
 public class LinkedList<E> {
 
     /**
@@ -427,6 +434,9 @@ public class LinkedList<E> {
      * Returns true if both lists have the exact same contents
      * in the exact same order
      *
+     * @param obj
+     *            i hate webcat
+     *
      * @return a boolean of whether two lists have the same contents,
      *         item per item and in the same order
      */
@@ -469,6 +479,12 @@ public class LinkedList<E> {
     }
 
 
+    /**
+     * set the head
+     * 
+     * @param sorted
+     *            head node to be sorted
+     */
     public void setHead(Node<E> sorted) {
         this.head = sorted;
     }
