@@ -5,21 +5,17 @@ import java.io.FileNotFoundException;
  * @author tejus
  *
  */
-import bsh.ParseException;
 
 public class Input {
 
     /**
      * @param args
-     * @throws SpaceColonyException
      * @throws FileNotFoundException
-     * @throws ParseException
      * @throws java.text.ParseException 
      */
     public static void main(String[] args)
-        throws ParseException,
-        FileNotFoundException, java.text.ParseException {
-        if (args.length == 2) {
+        throws  FileNotFoundException {
+        if (args.length == 1) {
             new DataReader(args[0]);
         }
         else {

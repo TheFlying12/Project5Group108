@@ -64,7 +64,7 @@ public class StateCalculator {
     }
 
 
-    public void sortCRF(Node<Race> headref) {
+    public void sortCFR(Node<Race> headref) {
         // initially, no nodes in sorted list so its set to null
         sorted = null;
         Node<Race> current = headref;

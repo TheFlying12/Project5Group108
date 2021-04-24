@@ -3,7 +3,6 @@ package prj5;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import bsh.ParseException;
 import student.testingsupport.annotations.Hint;
 
 /**
@@ -33,13 +32,11 @@ public class Input2020FReferenceTest extends student.TestCase {
      * and September 2020, which includes some NA fields.
      * Gathers the output from StdOut and compares it to the expected
      * output (stored in CovidOutput_1.txt)
-     * @throws java.text.ParseException 
-     * @throws ParseException 
      * 
      */
     @Hint("The main method is not working properly with input file "
         + "Cases_and_Deaths_by_race_CRDT_Sep2020.csv")
-    public void testMain01() throws java.io.IOException, ParseException, java.text.ParseException {
+    public void testMain01() throws java.io.IOException {
 
         Input.main(new String[] { "Cases_and_Deaths_by_race_CRDT_Sep2020.csv" });
 
@@ -72,13 +69,11 @@ public class Input2020FReferenceTest extends student.TestCase {
      * NA fields.
      * Gathers the output from StdOut and compares it to
      * the expect output (stored in CovidOutput_2.txt)
-     * @throws java.text.ParseException 
-     * @throws ParseException 
      * 
      */
     @Hint("The main method is not working properly with input files "
         + "Cases_and_Deaths_by_race_RANDOM_NUMBERS.csv")
-    public void testMain02() throws java.io.IOException, ParseException, java.text.ParseException {
+    public void testMain02() throws java.io.IOException {
 
         Input.main(new String[] { "Cases_and_Deaths_by_race_RANDOM_NUMBERS.csv"});
 
