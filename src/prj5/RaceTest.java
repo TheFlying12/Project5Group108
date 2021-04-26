@@ -49,6 +49,24 @@ public class RaceTest extends TestCase {
      */
     public void testGetRatio() {
         assertEquals(0.1, white.getRatio(), 0.001);
+        white.setDeaths(-1);
+        assertEquals((float)-.01, white.getRatio(), .01);
+        white.setDeaths(10000);
+        white.setInfected(-1);
+        assertEquals((float)-.01, white.getRatio(), .01);
+    }
+
+
+    /**
+     * test the setter methods
+     */
+    public void testSetters() {
+        white.setDeaths(0);
+        assertEquals(0, white.getDeaths());
+        white.setInfected(0);
+        assertEquals(0, white.getInfected());
+        white.setName("Black");
+        assertEquals("Black", white.getName());
     }
 
 
@@ -59,5 +77,13 @@ public class RaceTest extends TestCase {
         assertEquals(1, white.compareTo(new Race("Black", 100, 5)));
         assertEquals(0, white.compareTo(new Race("Asian", 100, 10)));
         assertEquals(-1, white.compareTo(new Race("Hispanic", 100, 15)));
+    }
+
+
+    /**
+     * public void test toString
+     */
+    public void testToString() {
+        assertEquals("white: 100 cases, 10% CFR", white.toString());
     }
 }

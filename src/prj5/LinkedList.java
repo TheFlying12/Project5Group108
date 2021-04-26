@@ -9,6 +9,8 @@ import java.util.NoSuchElementException;
  * @author tejus
  *
  * @param <E>
+ * 
+ * @version 4/25/2021
  */
 public class LinkedList<E> {
 
