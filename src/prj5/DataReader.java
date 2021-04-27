@@ -28,8 +28,7 @@ public class DataReader {
         throws FileNotFoundException {
         Scanner file = new Scanner(new File(fileName));
         LinkedList<State> newStates = new LinkedList<State>();
-        String[] racesNames = readRaces(file.nextLine().toString().split(
-            ","));
+        String[] racesNames = readRaces(file.nextLine().toString().split(","));
         String[] line;
         String stateName;
         LinkedList<Race> newRaces;
@@ -53,7 +52,7 @@ public class DataReader {
 
         for (int i = 0; i < newStates.size(); i++) {
             StateCalculator stateSorter = new StateCalculator(newStates.get(i));
-            System.out.println(newStates.get(i).getName());        
+            System.out.println(newStates.get(i).getName());
             stateSorter.sort(true).convertToString();
             System.out.println("=====");
             stateSorter.sort(false).convertToString();
@@ -76,11 +75,18 @@ public class DataReader {
 
 
     private String[] readRaces(String[] item) {
-        String[] races = new String[(item.length-1)/2];
+        String[] races = new String[(item.length - 1) / 2];
         for (int i = 1; i <= races.length; i++) {
             races[i - 1] = item[i].replace("Cases_", "");
         }
         return races;
     }
 
+
+    /**
+     * @return the states
+     */
+    public LinkedList<State> getStates() {
+        return states;
+    }
 }

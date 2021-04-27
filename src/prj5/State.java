@@ -38,6 +38,17 @@ public class State {
 
 
     /**
+     * sets stateName
+     * 
+     * @param newName
+     *            new name to be set for this state
+     */
+    public void setName(String newName) {
+        this.name = newName;
+    }
+
+
+    /**
      * this method returns the races.
      * 
      * @return races
