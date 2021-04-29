@@ -43,4 +43,14 @@ public class StateTest extends TestCase {
         assertEquals(races, state.getRaces());
     }
 
+
+    /**
+     * testing the converttoString method
+     */
+    public void testConvertToString() {
+        assertEquals(
+            "white: 5 cases, 200% CFR black: 54 cases, 18.5% CFR asian: 57 cases, 175.4% CFR ",
+            state.convertToString());
+    }
+
 }
