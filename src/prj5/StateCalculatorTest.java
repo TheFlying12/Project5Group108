@@ -3,7 +3,6 @@ package prj5;
 import student.TestCase;
 
 /**
- * 
  * @author tejus
  * @version 4/25/2021
  *          test stateCalc class
@@ -11,26 +10,42 @@ import student.TestCase;
 public class StateCalculatorTest extends TestCase {
 
     private StateCalculator calc;
-    private Race race;
-    private Race race1;
-    private Race race2;
+  
+    private LinkedList<Race> races;
+    private LinkedList<Race> sorted;
 
-
+    private LinkedList<Race> sorted1;
     /**
      * set up for the testcase
      */
 
     public void setUp() {
-        LinkedList<Race> races = new LinkedList<Race>();
-        races.add(new Race("White", 10, 20));
-        races.add(new Race("Black", 10, 20));
-        races.add(new Race("Asian", 10, 30));
+       Race race3 = new Race("other", 30, 1);
+       Race race2 = new Race("asian", 30, 10);
+       Race race = new Race("white", 15, 7);
+       Race race1 = new Race("black", 15, 7);
+            
+
+        races = new LinkedList<Race>();
+        races.add(race);
+        races.add(race1);
+        races.add(race2);
+        races.add(race3);
+
         State state = new State("VA", races);
         calc = new StateCalculator(state);
-        race = new Race("white", 5, 10);
-        race1 = new Race("black", 54, 10);
-        race2 = new Race("asian", 54, 10);
-       
+        sorted = new LinkedList<Race>();
+        sorted.add(race2);
+        sorted.add(race1);
+        sorted.add(race3);
+        sorted.add(race);
+        
+        sorted1 = new LinkedList<Race>();
+        sorted1.add(race1);
+        sorted1.add(race);
+        sorted1.add(race2);
+        sorted1.add(race3);
+
     }
 
 
@@ -38,19 +53,11 @@ public class StateCalculatorTest extends TestCase {
      * testing the sort method
      */
     public void testSort() {
-        assertEquals("VA", calc.sort(false).getName());
-        assertEquals("VA", calc.sort(true).getName());
+        assertEquals(sorted1, calc.sort(false).getRaces());
+        assertEquals(sorted, calc.sort(true).getRaces());
+        assertEquals(sorted, calc.sort(true).getRaces());
+        assertEquals(sorted1, calc.sort(false).getRaces());
+
     }
-    
-    public void testCompareToHelper() {
-        assertEquals(true, calc.compareToHelper(race, race1, false) );
-        assertEquals(false, calc.compareToHelper(race1, race, false) );
-        assertEquals(false, calc.compareToHelper(race, race1, true) );
-        assertEquals(true, calc.compareToHelper(race1, race, true) );
-        assertEquals(true, calc.compareToHelper(race2, race1, false) );
-        assertEquals(false, calc.compareToHelper(race1, race2, false) );
-        
-    }
-    
 
 }
